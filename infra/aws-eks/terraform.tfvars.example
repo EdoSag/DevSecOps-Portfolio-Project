@@ -1,0 +1,20 @@
+# Copy to terraform.tfvars and adjust as needed.
+
+aws_region   = "eu-north-1"
+cluster_name = "devsecops-portfolio"
+
+# Find your current public IP with: curl ifconfig.me
+# If your home/office IP changes later, update this list and run
+# `tofu apply` again - it patches the EKS endpoint access config in place,
+# no cluster recreation needed. As a fallback that doesn't depend on this
+# CIDR at all, use AWS SSM Session Manager port-forwarding to a worker node:
+#   aws ssm start-session --target <instance-id> \
+#     --document-name AWS-StartPortForwardingSession \
+#     --parameters '{"portNumber":["443"],"localPortNumber":["8443"]}'
+# then point kubectl at https://localhost:8443 with the cluster CA.
+cluster_endpoint_public_access_cidrs = ["203.0.113.10/32"]
+
+node_instance_types = ["t3.medium"]
+node_desired_size   = 2
+node_min_size       = 1
+node_max_size       = 3

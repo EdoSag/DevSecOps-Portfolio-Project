@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars and adjust as needed.
+# Bucket names must be globally unique across all of GCS.
+
+gcp_project_id = "devsecops-portfolio"
+location        = "EU"
+bucket_name     = "devsecops-portfolio-security-logs"
