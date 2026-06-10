@@ -1,0 +1,19 @@
+{
+  "name": "devsecops-portfolio-app",
+  "version": "1.0.0",
+  "description": "Demo API for the DevSecOps multi-cloud GitOps pipeline",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "jsonwebtoken": "8.5.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}

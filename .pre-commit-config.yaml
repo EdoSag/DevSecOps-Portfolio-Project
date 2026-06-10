@@ -1,0 +1,18 @@
+repos:
+  - repo: https://github.com/trufflesecurity/trufflehog
+    rev: v3.95.5
+    hooks:
+      - id: trufflehog
+        name: TruffleHog (secret scan)
+        entry: trufflehog filesystem . --exclude-paths .trufflehog-exclude.txt --no-verification --fail
+        language: golang
+        pass_filenames: false
+
+  - repo: https://github.com/bridgecrewio/checkov.git
+    rev: "3.3.0"
+    hooks:
+      - id: checkov
+        name: Checkov (IaC scan)
+        args: ["--directory", "infra", "--compact", "--quiet"]
+        files: ^infra/
+        pass_filenames: false

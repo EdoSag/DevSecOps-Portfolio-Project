@@ -1,0 +1,22 @@
+# OpenTofu / Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Env files
+.env
+!.env.example
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
