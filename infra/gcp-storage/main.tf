@@ -19,3 +19,12 @@ resource "google_storage_bucket" "security_logs" {
     retention_period = var.retention_period_seconds
   }
 }
+
+# Lets the GitHub Actions CI service account (Phase 2 OIDC) read objects in
+# this bucket - used by the OIDC verification workflow and for retrieving CI
+# evidence stored here.
+resource "google_storage_bucket_iam_member" "ci_object_viewer" {
+  bucket = google_storage_bucket.security_logs.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${var.ci_service_account_email}"
+}
