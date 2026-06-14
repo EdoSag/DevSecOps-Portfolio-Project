@@ -59,6 +59,22 @@ module "eks" {
 
   enable_irsa = true
 
+  # Without these, nodes have no CNI plugin and never reach Ready, which
+  # leaves the managed node group stuck in CREATE_FAILED ("Unhealthy nodes").
+  # vpc-cni must be installed before the node group launches.
+  addons = {
+    vpc-cni = {
+      most_recent    = true
+      before_compute = true
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    coredns = {
+      most_recent = true
+    }
+  }
+
   eks_managed_node_groups = {
     default = {
       instance_types = var.node_instance_types
