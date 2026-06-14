@@ -1,0 +1,40 @@
+name: Verify OIDC Trust (Phase 2)
+
+# Throwaway verification workflow: confirms the GitHub Actions -> AWS and
+# GitHub Actions -> GCP OIDC trust relationships set up in infra/bootstrap
+# actually work. Safe to delete once both jobs have run green.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314076239917:role/gh-actions-devsecops-ci
+          aws-region: eu-north-1
+
+      - name: Confirm assumed identity
+        run: aws sts get-caller-identity
+
+  gcp-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate to GCP via OIDC
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/777909808392/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+          service_account: gh-actions-ci@devsecops-portfolio.iam.gserviceaccount.com
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: List security logs bucket
+        run: gcloud storage ls gs://devsecops-portfolio-security-logs
