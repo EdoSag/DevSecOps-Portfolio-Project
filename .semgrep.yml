@@ -1,0 +1,21 @@
+rules:
+  - id: sqlite3-template-literal-query
+    languages: [javascript]
+    severity: ERROR
+    message: >-
+      SQL query string is built with a template literal and passed to a
+      sqlite3 query method. This is a SQL injection vulnerability - use a
+      parameterized query (`?` placeholders with a bound-parameters array)
+      instead.
+    metadata:
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp: "A03:2021 - Injection"
+      category: security
+    patterns:
+      - pattern: |
+          $QUERY = `...${$INPUT}...`;
+          ...
+          $DB.$METHOD($QUERY, ...)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: ^(all|get|run|each|exec)$
