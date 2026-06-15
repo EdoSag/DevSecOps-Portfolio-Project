@@ -1,0 +1,8 @@
+# CVE-2026-31789 (libssl3, CRITICAL): heap buffer overflow on 32-bit
+# systems when parsing a large X.509 certificate. Fixed upstream in
+# Debian's openssl 3.0.19-1~deb12u2; the gcr.io/distroless/nodejs20-debian12
+# :nonroot base image still ships 3.0.18-1~deb12u2 as of this commit.
+# This service only runs on 64-bit (amd64/arm64) EKS nodes, so the
+# 32-bit-only overflow is not exploitable here. Re-evaluate once the
+# distroless base image is rebuilt with the patched package.
+CVE-2026-31789
