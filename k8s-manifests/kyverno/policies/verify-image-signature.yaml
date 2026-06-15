@@ -1,0 +1,30 @@
+# Enforces that every image deployed under the sample app's image
+# repository was signed by this repo's CI pipeline (Phase 3 cosign keyless
+# sign) and has a corresponding Rekor transparency-log entry. Anything that
+# doesn't match (e.g. a bare `nginx:latest`) is admission-denied.
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signature
+spec:
+  validationFailureAction: Enforce
+  background: false
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+    - name: verify-devsecops-portfolio-image
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      verifyImages:
+        - imageReferences:
+            - "ghcr.io/edosag/devsecops-portfolio-project*"
+          attestors:
+            - entries:
+                - keyless:
+                    subjectRegExp: "^https://github\\.com/EdoSag/DevSecOps-Portfolio-Project/\\.github/workflows/.+@refs/heads/main$"
+                    issuer: "https://token.actions.githubusercontent.com"
+                    rekor:
+                      url: https://rekor.sigstore.dev
