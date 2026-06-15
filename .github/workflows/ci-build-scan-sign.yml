@@ -119,4 +119,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sign image (keyless)
-        run: cosign sign --yes ${{ needs.build-and-push.outputs.image }}@${{ needs.build-and-push.outputs.digest }}
+        # legacy mode also writes the OCI tag-based signature artifact
+        # (sha256-<digest>.sig) alongside the OCI 1.1 referrer, since
+        # Kyverno's bundled cosign verifier only looks up the tag-based form.
+        run: cosign sign --yes --registry-referrers-mode=legacy ${{ needs.build-and-push.outputs.image }}@${{ needs.build-and-push.outputs.digest }}
