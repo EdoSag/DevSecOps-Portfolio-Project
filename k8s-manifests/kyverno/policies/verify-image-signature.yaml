@@ -26,6 +26,5 @@ spec:
                 - keyless:
                     subjectRegExp: "^https://github\\.com/EdoSag/DevSecOps-Portfolio-Project/\\.github/workflows/.+@refs/heads/main$"
                     issuer: "https://token.actions.githubusercontent.com"
-                    # No explicit rekor.url override - use Kyverno's
-                    # default Sigstore trust root, which matches the
-                    # transparency log cosign writes to by default.
+                    rekor:
+                      url: https://rekor.sigstore.dev
