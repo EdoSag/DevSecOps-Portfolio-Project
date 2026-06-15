@@ -9,7 +9,6 @@ admissionController:
       memory: 256Mi
   container:
     extraArgs:
-      - --loggingFormat=text
       - -v=6
 
 backgroundController:
