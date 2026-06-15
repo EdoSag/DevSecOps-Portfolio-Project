@@ -17,7 +17,7 @@ spec:
       containers:
         - name: sample-app
           # Pinned to the digest signed by the CI pipeline (Phase 3).
-          image: ghcr.io/edosag/devsecops-portfolio-project@sha256:b5a19521f3ed5ce1cd1830f3a54651eadf0dfae9947cc845f442c04ad772ca42
+          image: ghcr.io/edosag/devsecops-portfolio-project@sha256:0f63fed037b9a2f615d0b8353d6f2bd24f9c2b008f73f0a9afbfa0eb6dff540d
           ports:
             - containerPort: 3000
           readinessProbe:
