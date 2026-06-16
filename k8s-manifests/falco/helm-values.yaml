@@ -24,6 +24,8 @@ falcosidekick:
   #     --from-literal=GCP_STORAGE_MINIMUMPRIORITY=warning
   existingSecret: falco-sidekick-config
 
+  replicaCount: 1
+
   resources:
     requests:
       cpu: 100m
