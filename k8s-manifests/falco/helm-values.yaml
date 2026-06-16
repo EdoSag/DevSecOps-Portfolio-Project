@@ -12,34 +12,17 @@ resources:
 falcosidekick:
   enabled: true
 
-  # Non-secret config baked into the ConfigMap; secrets are injected via
-  # extraEnv below (env vars override ConfigMap values at runtime).
-  config:
-    gcp:
-      credentials: ""
-      storage:
-        bucket: devsecops-portfolio-security-logs
-        prefix: falco-alerts
-        minimumpriority: warning
-    slack:
-      webhookurl: ""
-      minimumpriority: warning
-      messageformat: |
-        *[Falco]* `{{ .Rule }}` on `{{ .OutputFields.k8s.pod.name }}` — *{{ .Priority }}*
-        > {{ .Output }}
-
-  # Secrets are injected here; env var names map to falcosidekick config keys.
-  extraEnv:
-    - name: SLACK_WEBHOOKURL
-      valueFrom:
-        secretKeyRef:
-          name: falco-slack-secret
-          key: webhookurl
-    - name: GCP_CREDENTIALS
-      valueFrom:
-        secretKeyRef:
-          name: falco-gcs-b64-secret
-          key: credentials
+  # All Falcosidekick config env vars (including credentials) come from a
+  # pre-created Secret that is NOT managed by this Helm chart.
+  # Create it manually:
+  #   kubectl -n falco create secret generic falco-sidekick-config \
+  #     --from-literal=SLACK_WEBHOOKURL=https://hooks.slack.com/... \
+  #     --from-literal=SLACK_MINIMUMPRIORITY=warning \
+  #     --from-literal=GCP_CREDENTIALS=<base64-SA-key-JSON> \
+  #     --from-literal=GCP_STORAGE_BUCKET=devsecops-portfolio-security-logs \
+  #     --from-literal=GCP_STORAGE_PREFIX=falco-alerts \
+  #     --from-literal=GCP_STORAGE_MINIMUMPRIORITY=warning
+  existingSecret: falco-sidekick-config
 
   resources:
     requests:
