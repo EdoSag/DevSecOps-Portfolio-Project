@@ -22,9 +22,14 @@ falcosidekick:
   #     --from-literal=GCP_STORAGE_BUCKET=devsecops-portfolio-security-logs \
   #     --from-literal=GCP_STORAGE_PREFIX=falco-alerts \
   #     --from-literal=GCP_STORAGE_MINIMUMPRIORITY=warning
-  existingSecret: falco-sidekick-config
-
   replicaCount: 1
+
+  config:
+    # All Falcosidekick config env vars (including credentials) come from a
+    # pre-created Secret. It is appended to envFrom AFTER the chart-created
+    # secret, so its values override the empty defaults for SLACK_WEBHOOKURL,
+    # GCP_CREDENTIALS, etc.
+    existingSecret: falco-sidekick-config
 
   resources:
     requests:
